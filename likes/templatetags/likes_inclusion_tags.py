@@ -17,7 +17,8 @@ def likes(context, obj, template=None):
     try:
         model_name = obj._meta.model_name
     except AttributeError:
-        model_name = obj._meta.module_name
+        # Fallback для очень старых версий Django
+        model_name = getattr(obj._meta, "module_name", obj._meta.model_name)
     context.update(
         {
             "template": template,

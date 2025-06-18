@@ -19,11 +19,11 @@ This app utilizes `Django Secretballot <http://pypi.python.org/pypi/django-secre
 Requirements
 ------------
 
-#. Python 2.7, 3.5-3.11
+#. Python 3.6-3.12
 
-#. Django 1.11, 2.0, 2.1,3.1,3.2,4.0
+#. Django 2.2, 3.0, 3.1, 3.2, 4.0, 4.1, 4.2, 5.0, 5.1, 5.2
 
-#. django-secretballot 1.0.0
+#. django-secretballot 2.0.0
 
 Installation
 ------------
@@ -35,14 +35,14 @@ Installation
 
 #. Add likes url include to your project's ``urls.py`` file::
 
-    url('likes/', include('likes.urls')),
+    path('likes/', include('likes.urls')),
 
-#. Add ``likes.middleware.SecretBallotUserIpUseragentMiddleware`` to your ``MIDDLEWARE_CLASSES`` setting, i.e.::
+#. Add ``likes.middleware.SecretBallotUserIpUseragentMiddleware`` to your ``MIDDLEWARE`` setting, i.e.::
 
-    MIDDLEWARE_CLASSES = (
+    MIDDLEWARE = [
         ...other middleware classes...
         "likes.middleware.SecretBallotUserIpUseragentMiddleware",
-    )
+    ]
 
 #. Make sure ``django.template.context_processors.request`` is in your ``TEMPLATES['OPTIONS']['context_processors']`` setting.
 
@@ -83,4 +83,3 @@ To determine whether or not liking/voting should be enabled on an object, connec
 likes.signals.can_vote_test
 +++++++++++++++++++++++++++
 To determine whether or not the current requesting user can vote, connect a signal handler to the ``likes.signals.can_vote_test`` signal, raising a ``likes.exceptions.CannotVoteException`` if the current user should not be allowed to vote (the handler receives a request object). The default behaviour is that all users can vote except if they have previously voted on the object in question.
-

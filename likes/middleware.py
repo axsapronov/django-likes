@@ -15,7 +15,12 @@ class SecretBallotUserIpUseragentMiddleware(SecretBallotIpUseragentMiddleware):
             return request.user.username
         else:
             try:
-                s = "".join((request.META["REMOTE_ADDR"], request.headers['User-Agent']))
+                s = "".join(
+                    (
+                        request.META["REMOTE_ADDR"],
+                        request.META.get("HTTP_USER_AGENT", ""),
+                    )
+                )
                 return md5(s.encode("utf-8")).hexdigest()
             except KeyError:
                 return None

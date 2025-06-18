@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.0.3
+-----
+#. Django 5.2 compatibility.
+#. Removed deprecated `providing_args` parameter from signals.
+#. Fixed compatibility issues with `request.headers` vs `request.META`.
+#. Fixed compatibility issues with `module_name` vs `model_name`.
+
 2.0.2
 -----
 #. Python 3.8, 3.9, 3.10, 3.11 support.

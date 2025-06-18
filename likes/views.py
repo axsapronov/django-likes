@@ -10,10 +10,19 @@ from likes.utils import can_vote, is_ajax
 
 
 def can_vote_test(request, content_type, object_id, vote):
-    return can_vote(content_type.get_object_for_this_type(id=object_id), request.user, request)
+    return can_vote(
+        content_type.get_object_for_this_type(id=object_id), request.user, request
+    )
 
 
-def like(request, content_type, id, vote, template_name="likes/inclusion_tags/likes.html", can_vote_test=can_vote_test):
+def like(
+    request,
+    content_type,
+    id,
+    vote,
+    template_name="likes/inclusion_tags/likes.html",
+    can_vote_test=can_vote_test,
+):
     # Crawlers will follow the like link if anonymous liking is enabled. They
     # typically do not have referrer set.
     if "HTTP_REFERER" not in request.META:
@@ -46,7 +55,10 @@ def like(request, content_type, id, vote, template_name="likes/inclusion_tags/li
     else:
         # Redirect to referer but append unique number (determined
         # from global vote count) to end of URL to bypass local cache.
-        redirect_url = "%s?v=%s" % (request.headers['Referer'], random.randint(0, 10))
+        redirect_url = "%s?v=%s" % (
+            request.META.get("HTTP_REFERER", "/"),
+            random.randint(0, 10),
+        )
         response = views.vote(
             request,
             content_type=content_type,
@@ -57,6 +69,8 @@ def like(request, content_type, id, vote, template_name="likes/inclusion_tags/li
         )
 
     signals.object_liked.send(
-        sender=content_type.model_class(), instance=content_type.get_object_for_this_type(id=id), request=request
+        sender=content_type.model_class(),
+        instance=content_type.get_object_for_this_type(id=id),
+        request=request,
     )
     return response
